@@ -1,0 +1,179 @@
+<form [formGroup]="POAddForm" novalidate>
+    <mat-card class="custom-card">
+        <mat-card-header class="sticky-header">
+            <mat-card-title style="color: #302CB3;">Purchase Order</mat-card-title>
+            <span class="spacer"></span>
+            <button mat-icon-button (click)="onClose()" class="no-border-icon">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-card-header>
+
+        <mat-card-content class="scroll-content" style="padding-top:10px">
+            <!-- Row 1 -->
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label class="form-label">Company Code<span class="text-danger">*</span></label>
+                    <CompanyPicker id="companyCode1" formControlName="CompanyCode"
+                        (companyEmit)="handleCompanyEvent($event)"></CompanyPicker>
+                    <div *ngIf="POAddForm.get('CompanyCode')?.touched && POAddForm.get('CompanyCode')?.hasError('required')"
+                        class="text-danger small">
+                        Company Code is required
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">PO Category<span class="text-danger">*</span></label>
+                    <select class="form-select" formControlName="POCategory">
+                        <option value="">-- Select --</option>
+
+                        <option *ngFor="let cat of Category" [value]="cat.categoryID">{{cat.category_Name}}</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">PO No<span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" formControlName="POform" />
+
+                    <!-- <select class="form-select" formControlName="POform">
+                        <option value="">-- Select --</option>
+                        <option *ngFor="let PONo of PONumber" [value]="PONo.poid">{{PONo.ponumber}}</option>
+                    </select> -->
+                </div>
+            </div>
+
+            <!-- Row 2 -->
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label class="form-label">PO Date<span class="text-danger">*</span></label>
+                    <input type="date" class="form-control" formControlName="PODate" [disabled]="isdisable" />
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Start Date<span class="text-danger">*</span></label>
+                    <input type="date" class="form-control" formControlName="StartDate" />
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">End Date<span class="text-danger">*</span></label>
+                    <input type="date" class="form-control" formControlName="EndDate" />
+                </div>
+            </div>
+
+            <!-- Row 3 -->
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label class="form-label">PO Quantity Type<span class="text-danger">*</span></label>
+                    <select class="form-select form-select-sm" formControlName="POQuantitytype">
+                        <option value="">-- Select --</option>
+                        <option *ngFor="let Quantity of POQuantitytype" [value]="Quantity.rowid">{{Quantity.code}}
+                        </option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Billing Type<span class="text-danger">*</span></label>
+                    <select class="form-select" formControlName="BillingType">
+                        <option value="">-- Select --</option>
+                        <option *ngFor="let bill of BillingType" [value]="bill.rowid">{{bill.code}}</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">PO Quantity (Auto)<span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" [value]="selectedPOQuantityCode" disabled />
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Pricing Type<span class="text-danger">*</span></label>
+                    <select class="form-select" formControlName="PricingType">
+                        <option *ngFor="let type of InvoiceType" [value]="type.invoiceTypeID">{{type.invoiceType}}
+                        </option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Currency<span class="text-danger">*</span></label>
+                    <select class="form-select" formControlName="CurrencyType">
+                        <option *ngFor="let curr of currency" [value]="curr.rowid">{{curr.code}}</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">PO Value<span class="text-danger">*</span></label>
+                    <input type="number" class="form-control" formControlName="POValue" />
+                </div>
+                <div class="row g-3">
+                    <!-- Add this inside the same Row 3 div where other inputs are -->
+
+                    <div class="col-md-4">
+                        <label class="form-label">Internal/External<span class="text-danger">*</span></label>
+                        <select class="form-select" formControlName="Internal_External">
+                            <option value="1">Internal</option>
+                            <option value="2">External</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small mb-1">Upload Document<span
+                                class="text-danger">*</span></label>
+
+                        <div class="d-flex align-items-center gap-3">
+                            <input type="file" #fileInput (change)="onFileSelected($event)" hidden />
+
+                            <button type="button" class="btn btn-outline-secondary btn-sm d-flex align-items-center"
+                                (click)="fileInput.click()" style="gap: 8px;">
+                                <img src="assets/Icons/Upload_enabled.svg" alt="Upload"
+                                    style="width: 20px; height: 20px;" />
+                                <span>Choose File</span>
+                            </button>
+
+                            <span class="text-muted small text-truncate" style="max-width: 250px;" *ngIf="selectedFile"
+                                [title]="selectedFile.name">
+                                {{ selectedFile.name }}
+                            </span>
+                        </div>
+
+                        <div *ngIf="POAddForm.get('Document')?.touched && POAddForm.get('Document')?.hasError('required')"
+                            class="text-danger small mt-1">
+                            Document is required
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- File Upload Row -->
+            <!-- <div class="row g-3 mb-4"> -->
+            <!-- Addresses -->
+            <div class="row g-4 mt-1">
+            </div>
+        </mat-card-content>
+        <mat-card-footer class="footer">
+            <div class="d-flex justify-content-end mt-3">
+                <div class="btn-1"
+                    style="display: flex; justify-content: flex-end; gap: 10px; width: 100%; padding-right: 7px;">
+
+                    <button type="Cancel"
+                        style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0; color: black;"
+                        (click)="resetForm()">
+                        Reset
+                    </button>
+
+                    <button type="submit"
+                        style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; color: white; "
+                        (click)="ValidatedSubmit()">
+                        Save
+                    </button>
+                </div>
+            </div>
+        </mat-card-footer>
+        <!-- <mat-card-footer class="footer">
+            <div class="d-flex justify-content-end mt-3">
+                <button type="reset" class="btn btn-primary me-2 rounded-pill px-3" (click)="resetForm()">Reset</button>
+                <button type="button" class="btn btn-primary rounded-pill px-3"
+                    (click)="ValidatedSubmit()">Save</button>
+            </div>
+        </mat-card-footer> -->
+    </mat-card>
+</form>
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
+</div>
+<div *ngIf="showPopup" class="overlay">
+    <app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
+        (close)="showPopup = false"></app-alertpopup>
+</div>

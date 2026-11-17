@@ -1,0 +1,23 @@
+<div class="headerSOP">
+        <div style="width: 50%;"> <i><svg width="25" height="25" viewBox="0 0 35 35" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path [attr.d]="iconpath" 
+                fill="#302CB3"/>
+            </svg>
+          </i><b class="customer-sop">Customer</b>
+        </div>
+</div>
+<div class="contentCategory">
+        <div style="width: 100%;">
+                <div class="Categorylist">
+                        <ul class="horizontal-list">
+                                <li *ngFor="let menu of childMenus">
+                                        <a [routerLink]="menu.childroute" class="nav-link" routerLinkActive="selectedInput"
+                                                [routerLinkActiveOptions]="{ exact: true }">
+                                                {{ menu.childdisplayText }}
+                                        </a>
+                                </li>
+                        </ul>
+                </div>
+        </div>
+</div>
+<router-outlet></router-outlet>

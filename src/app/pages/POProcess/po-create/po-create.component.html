@@ -1,0 +1,116 @@
+<div class="page-wrapper">
+  <div class="scrollable-content">
+
+    <div style="color:#302CB3;font-size:22px;font-family:Montserrat;font-weight:700">
+      Main PO
+    </div>
+
+    <div class="container py-2">
+      <div class="row g-3 align-items-end">
+
+        <div class="col-md-3">
+          <label class="form-label text-muted small">Company Code<span class="text-danger">*</span></label>
+          <CompanyPicker (companyEmit)="handleCompanyEvent($event)"></CompanyPicker>
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label text-muted small">PO Number<span class="text-danger">*</span></label>
+          <ponumbersearch [comapnyId]="comapnyId" (ponumbersearchEmit)="handleponumbersearchEvent($event)">
+          </ponumbersearch>
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label text-muted small">Pricing Type<span class="text-danger">*</span></label>
+          <potype (potypeEmit)="potypeEvent($event)"></potype>
+        </div>
+
+        <div class="col-md-3 d-flex gap-2">
+          <button class="btn btn-sm d-flex align-items-center justify-content-center btn-search" matTooltip="search"
+            (click)="MainPOSearch()">
+            <mat-icon>search</mat-icon>
+          </button>
+          <button class="btn btn-sm d-flex align-items-center justify-content-center btn-add" (click)="AddPOOpen()">
+            <mat-icon>add</mat-icon>
+          </button>
+          <button class="btn btn-sm d-flex align-items-center justify-content-center btn-download" matTooltip="Template"
+            (click)="DownloadTemplate()">
+            <mat-icon>cloud_download</mat-icon>
+          </button>
+          <button class="btn btn-sm d-flex align-items-center justify-content-center btn-upload" matTooltip="import"
+            (click)="ImportClick(fileInput)">
+            <mat-icon>cloud_upload</mat-icon>
+          </button>
+        </div>
+
+        <input type="file" #fileInput hidden (click)="fileInput.value=''" (change)="onFileChange($event)"
+          accept=".xlsx,.xls" />
+
+      </div>
+    </div>
+
+    <!-- TABLE 1 -->
+    <div class="table-wrapper1" [hidden]="!(dataSource1 && dataSource1.data && dataSource1.data.length > 0)">
+      <div class="summary-grid">
+        <div *ngFor="let column of displayedColumns1" class="field-row">
+          <label class="field-label">{{ columnMap1[column] || column }}</label>
+          <input class="field-input" [value]="dataSource1.data[0][column]" disabled />
+        </div>
+      </div>
+
+      <div class="table-scroll">
+        <mat-table [dataSource]="dataSource" class="mat-elevation-z8 custom-table">
+
+          <ng-container *ngFor="let column of displayedColumns" [matColumnDef]="column">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>
+              <strong>{{ getReadableColumnName(column) }}</strong>
+            </mat-header-cell>
+            <mat-cell *matCellDef="let row">
+              {{ row[column] }}
+            </mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+
+        </mat-table>
+      </div>
+
+      <mat-paginator #pagiantor0 [pageSizeOptions]="[5,10,25]" showFirstLastButtons>
+      </mat-paginator>
+    </div>
+
+
+    <!-- TABLE 2 -->
+    <div class="table-wrapper1" *ngIf="dataSource2 && dataSource2.data && dataSource2.data.length > 0">
+      <div class="table-scroll">
+        <mat-table [dataSource]="dataSource2" class="mat-elevation-z8 custom-table">
+
+          <ng-container *ngFor="let column of displayedColumns2" [matColumnDef]="column">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>
+              <strong>{{ getReadableColumnName(column) }}</strong>
+            </mat-header-cell>
+            <mat-cell *matCellDef="let row">
+              {{ row[column] }}
+            </mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="displayedColumns2"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns2"></mat-row>
+
+        </mat-table>
+      </div>
+
+      <mat-paginator #pagiantor1 [pageSizeOptions]="[5,10,25]" showFirstLastButtons>
+      </mat-paginator>
+    </div>
+
+  </div>
+</div>
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
+</div>
+<div *ngIf="showPopup" class="overlay">
+  <app-alertpopup [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
+    (close)="showPopup=false">
+  </app-alertpopup>
+</div>

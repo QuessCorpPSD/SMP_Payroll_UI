@@ -1,0 +1,51 @@
+<div class="menu-search" (click)="$event.stopPropagation()">
+
+  <div class="search-box">
+    <i class="bi bi-search"></i>
+
+    <input type="text" class="form-control" placeholder="Search menu..." [(ngModel)]="menuSearchText"
+      (focus)="openMenuSearch()" (input)="filterMenus()" autocomplete="off" />
+
+    <button *ngIf="menuSearchText" type="button" class="clear-btn" (click)="clearMenuSearch()">
+      ×
+    </button>
+  </div>
+
+  <div class="menu-search-dropdown" *ngIf="showMenuDropdown">
+
+    <!-- No results -->
+    <div class="no-result" *ngIf="filteredMenus.length === 0">
+      <i class="bi bi-search"></i>
+      <span>No menu found</span>
+    </div>
+
+    <!-- Menu results -->
+    <div class="menu-item" *ngFor="let menu of filteredMenus" (click)="navigateToMenu(menu.route)">
+
+      <div class="menu-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+
+          <path *ngIf="menu.menuIcon" [attr.d]="menu.menuIcon">
+          </path>
+
+        </svg>
+      </div>
+
+      <div class="menu-details">
+
+        <div class="menu-name">
+          {{ menu.displayText }}
+        </div>
+
+        <div class="menu-parent" *ngIf="menu.parentName">
+          {{ menu.parentName }}
+        </div>
+
+      </div>
+
+      <i class="bi bi-arrow-up-right-short navigate-icon"></i>
+    </div>
+
+  </div>
+
+</div>

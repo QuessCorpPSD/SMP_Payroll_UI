@@ -1,0 +1,59 @@
+<div class="container py-1">
+    <div class="container-fluid">
+        <div
+            style="color: #302CB3; font-size: 22px; font-family: Montserrat; font-weight: 700; min-width: 960px;padding-top: 12px;">
+            Pay Register Upload
+        </div>
+
+        <div>
+            <div class="row align-items-end">
+                <div class="col-12 col-md-3">
+                    <label class="form-label text-muted small">Company Code</label>
+                    <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
+                    <!-- <input type="text" class="form-control form-control-sm" formControlName="CompanyCode" /> -->
+                    <!-- <select class="form-select form-select-sm" formControlName="CompanyCode">
+                            <option value="">--Select--</option> -->
+                    <!-- <option *ngFor="let pay of paytype" [value]="pay.PayType_Id">{{pay.PayType}}</option> -->
+                    <!-- </select> -->
+                </div>
+                <div class="col-12 col-md-3">
+                    <label class="form-label text-muted small">Pay Period</label>
+                    <PayPeriod [selectedCompanyId]="selectedCompanyId" [payPeriodType]="payPeriodType"
+                        (payperiodEmit)="handlePayperiodEvent($event)"></PayPeriod>
+                    <!-- <select class="form-select form-select-sm" formControlName="PayPeriod">
+                            <option value="">--Select--</option> -->
+                    <!-- <option *ngFor="let pay of paytype" [value]="pay.PayType_Id">{{pay.PayType}}</option> -->
+                    <!-- </select> -->
+                </div>
+                <div class="col-md-3 d-flex gap-2">
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-secondary"
+                        (click)="exportToExcel()" matTooltip="Export To Excel">
+                        <mat-icon>download</mat-icon>
+                    </button>
+                    <!-- <button class="btn btn-sm d-flex align-items-center justify-content-center"
+                            matTooltip="Export to excel" (click)="exportToExcel()">
+                            <mat-icon>table_chart</mat-icon>
+                        </button> -->
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-upload"
+                        matTooltip="Import" (click)="ImportClick(fileInput)">
+                        <mat-icon>cloud_upload</mat-icon>
+                    </button>
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-download"
+                        matTooltip="Download" (click)="DownloadTemplate()">
+                        <mat-icon>cloud_download</mat-icon>
+                    </button>
+                </div>
+                <input type="file" #fileInput style="display: none;" (click)="fileInput.value=''"
+                    (change)="onFileChange($event)" accept=".xlsx, .xls" />
+
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets\Loading.gif" alt="Loading...">
+</div>
+
+<app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
+    (close)="showPopup = false">
+</app-alertpopup>

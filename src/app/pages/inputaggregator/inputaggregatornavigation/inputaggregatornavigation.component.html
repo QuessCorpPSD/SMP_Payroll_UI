@@ -1,0 +1,17 @@
+<div class="headerSOP">
+</div>
+<div class="contentCategory">
+    <div style="width: 100%;">
+        <div class="Categorylist">
+            <ul class="horizontal-list">
+                <li *ngFor="let menu of childMenus">
+                    <a [routerLink]="menu.childroute" class="nav-link" routerLinkActive="selectedInput"
+                        [routerLinkActiveOptions]="{ exact: true }">
+                        {{ menu.childdisplayText }}
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<router-outlet></router-outlet>

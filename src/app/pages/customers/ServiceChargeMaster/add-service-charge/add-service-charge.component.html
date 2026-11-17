@@ -1,0 +1,1432 @@
+<mat-card class="custom-card">
+    <mat-card-header class="sticky-header">
+        <br />
+        <mat-card-title style="color: #302CB3;"> Add Service Charge</mat-card-title>
+        <span class="spacer"></span>
+        <button mat-icon-button (click)="onClose()" class="no-border-icon">
+            <mat-icon>close</mat-icon>
+        </button>
+    </mat-card-header>
+
+    <mat-card-content>
+
+        <!-- SERVICE MASTER DROPDOWN -->
+        <div class="row g-3 mb-3">
+            <div class="col-md-5 same-col">
+                <label class="form-label text-muted small">Service Charge</label>
+
+                <select class="form-select form-select-sm" [(ngModel)]="selectedMasterId" (change)="onMasterSelected()">
+
+                    <option value="">Select</option>
+
+                    <option *ngFor="let item of serviceChargeMasterList" [value]="item.Service_Charge_Master_Id">
+                        {{ item.Service_Charge_Master_Name }}
+                    </option>
+
+                </select>
+            </div>
+
+            <!-- SERVICE FEE DROPDOWN -->
+            <div class="col-md-4 same-col" *ngIf="showServiceFeeSection">
+                <!-- <app-add-servicefee
+                (fixedSelected)="showFixedSection()"
+                (percentageSelected)="showPercentageSection()"
+                (billSelected)="showBillToRateSection()"
+                (slabSelected)="showSlabSection()">
+              </app-add-servicefee> -->
+                <div class="col-md-4 same-col">
+                    <label class="form-label text-muted small">Service Fee</label>
+
+                    <select class="form-select form-select-sm" [(ngModel)]="selectedService"
+                        (change)="onServiceFeeChange()">
+                        <option value="">Select</option>
+
+                        <option *ngFor="let type of serviceFeeTypes" [value]="type.Service_Charge_Type_Id">
+                            {{ type.Service_Charge_Type_Name }}
+                        </option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- SUPPLEMENTARY DROPDOWN -->
+            <div class="col-md-4 same-col" *ngIf="showSupplementSection">
+                <div class="col-md-4 same-col">
+                    <label class="form-label text-muted small">Supplementary Fee</label>
+
+                    <select class="form-select form-select-sm" [(ngModel)]="selectedSupplementary"
+                        (change)="onSupplementaryChange()">
+
+                        <option value="">Select</option>
+
+                        <option *ngFor="let type of supplementaryTypes" [value]="type.Service_Charge_Type_Id">
+                            {{ type.Service_Charge_Type_Name }}
+                        </option>
+
+                    </select>
+                </div>
+                <!-- <app-supplementary-fee (fixedSelected)="selectSupplementType('fixed')"
+                    (percentageSelected)="selectSupplementType('percentage')">
+                </app-supplementary-fee> -->
+            </div>
+        </div>
+
+        <!-- SERVICE FEE BODY -->
+        <div class="col-12" *ngIf="showFixed">
+            <form [formGroup]="invoiceForm" novalidate>
+
+
+                <div class="row g-3 mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Map Name <span class="text-danger">*</span></label>
+
+                        <!-- <select class="form-select form-select-sm" formControlName="mapName">
+                <option value="">Select</option>
+                <option *ngFor="let item of mapNameList" [ngValue]="item">
+                    {{ item.map_Name }}
+                </option>
+            </select> -->
+
+                        <mapname [selectedCompanyId]="selectedCompanyId" (mapnameEmit)="handleMapNameEvent($event)">
+                        </mapname>
+                    </div>
+
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Value <span class="text-danger">*</span></label>
+                        <input type="number" class="form-control form-control-sm" formControlName="value">
+                        <small class="text-danger"
+                            *ngIf="showErrors && invoiceForm.get('value')?.invalid">Required</small>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Prorate <span class="text-danger">*</span></label>
+                        <select class="form-select form-select-sm" formControlName="prorate">
+                            <option value="">Select</option>
+                            <option value="1">Yes</option>
+                            <option value="0">No</option>
+                        </select>
+                        <small class="text-danger"
+                            *ngIf="showErrors && invoiceForm.get('prorate')?.invalid">Required</small>
+                    </div>
+                </div>
+
+
+                <div class="row g-3 mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">FAndF Prorate <span
+                                class="text-danger">*</span></label>
+                        <select class="form-select form-select-sm" formControlName="ffProrate">
+                            <option value="">Select</option>
+                            <option value="1">Yes</option>
+                            <option value="0">No</option>
+                        </select>
+                        <small class="text-danger"
+                            *ngIf="showErrors && invoiceForm.get('ffProrate')?.invalid">Required</small>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">FAndF Arrear Prorate <span
+                                class="text-danger">*</span></label>
+                        <select class="form-select form-select-sm" formControlName="ffArrearprorate">
+                            <option value="">Select</option>
+                            <option value="1">Yes</option>
+                            <option value="0">No</option>
+                        </select>
+                        <small class="text-danger"
+                            *ngIf="showErrors && invoiceForm.get('ffArrearprorate')?.invalid">Required</small>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">New Joinee Prorate <span
+                                class="text-danger">*</span></label>
+                        <select class="form-select form-select-sm" formControlName="newJoineeProrate">
+                            <option value="">Select</option>
+                            <option value="1">Yes</option>
+                            <option value="0">No</option>
+                        </select>
+                        <small class="text-danger"
+                            *ngIf="showErrors && invoiceForm.get('newJoineeProrate')?.invalid">Required</small>
+                    </div>
+                </div>
+
+
+                <div class="row g-3 mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">New Joinee Arrear Prorate <span
+                                class="text-danger">*</span></label>
+                        <select class="form-select form-select-sm" formControlName="newJoineeArrearprorate">
+                            <option value="">Select</option>
+                            <option value="1">Yes</option>
+                            <option value="0">No</option>
+                        </select>
+                        <small class="text-danger"
+                            *ngIf="showErrors && invoiceForm.get('newJoineeArrearprorate')?.invalid">Required</small>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Effective Date <span
+                                class="text-danger">*</span></label>
+                        <input type="date" class="form-control form-control-sm" formControlName="startDate">
+                        <small class="text-danger"
+                            *ngIf="showErrors && invoiceForm.get('startDate')?.invalid">Required</small>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Compliance Fee <span
+                                class="text-danger">*</span></label>
+                        <input type="number" class="form-control form-control-sm" formControlName="complianceFee">
+
+                        <small class="text-danger"
+                            *ngIf="showErrors && invoiceForm.get('complianceFee')?.invalid">Required</small>
+                    </div>
+                </div>
+
+
+                <div class="row g-3 mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Randstad Fee <span
+                                class="text-danger">*</span></label>
+                        <input type="number" class="form-control form-control-sm" formControlName="randstadFee">
+
+                        <small class="text-danger"
+                            *ngIf="showErrors && invoiceForm.get('randstadFee')?.invalid">Required</small>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Upfront Fee Type <span
+                                class="text-danger">*</span></label>
+                        <select class="form-select form-select-sm" formControlName="upfrontFeeType">
+                            <option value="">Select</option>
+                            <option value="0">Fixed</option>
+                            <option value="1">Percentage</option>
+                        </select>
+                        <small class="text-danger"
+                            *ngIf="showErrors && invoiceForm.get('upfrontFeeType')?.invalid">Required</small>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Upfront Fee <span
+                                class="text-danger">*</span></label>
+                        <input type="number" class="form-control form-control-sm" formControlName="upfrontFee">
+                        <small class="text-danger"
+                            *ngIf="showErrors && invoiceForm.get('upfrontFee')?.invalid">Required</small>
+                    </div>
+                </div>
+
+
+                <div class="row g-3 mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Upfront Pay Code <span
+                                class="text-danger">*</span></label>
+                        <input type="text" class="form-control form-control-sm" formControlName="upfrontPayCode">
+                        <small class="text-danger"
+                            *ngIf="showErrors && invoiceForm.get('upfrontPayCode')?.invalid">Required</small>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Insurance Amount <span
+                                class="text-danger">*</span></label>
+                        <input type="text" class="form-control form-control-sm" formControlName="insuranceAmount">
+                        <small class="text-danger"
+                            *ngIf="showErrors && invoiceForm.get('insuranceAmount')?.invalid">Required</small>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">QDemy Fee Type <span
+                                class="text-danger">*</span></label>
+                        <select class="form-select form-select-sm" formControlName="qdemyFeeType">
+                            <option value="">Select</option>
+                            <option value="0">Fixed</option>
+                            <option value="1">Percentage</option>
+                        </select>
+                        <small class="text-danger"
+                            *ngIf="showErrors && invoiceForm.get('qdemyFeeType')?.invalid">Required</small>
+                    </div>
+                </div>
+
+
+                <div class="row g-3 mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">QDemy Charge <span
+                                class="text-danger">*</span></label>
+                        <input type="number" class="form-control form-control-sm" formControlName="qdemyCharge">
+                        <small class="text-danger"
+                            *ngIf="showErrors && invoiceForm.get('qdemyCharge')?.invalid">Required</small>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">InEdge Fee Type <span
+                                class="text-danger">*</span></label>
+                        <select class="form-select form-select-sm" formControlName="inedgeFeeType">
+                            <option value="">Select</option>
+                            <option value="0">Fixed</option>
+                            <option value="1">Percentage</option>
+                        </select>
+                        <small class="text-danger"
+                            *ngIf="showErrors && invoiceForm.get('inedgeFeeType')?.invalid">Required</small>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">InEdge Charge <span
+                                class="text-danger">*</span></label>
+                        <input type="number" class="form-control form-control-sm" formControlName="inedgeCharge">
+                        <small class="text-danger"
+                            *ngIf="showErrors && invoiceForm.get('inedgeCharge')?.invalid">Required</small>
+                    </div>
+                </div>
+
+            </form>
+
+
+            <div class="d-flex justify-content-end mt-3">
+                <div class="btn-1"
+                    style="display: flex; justify-content: flex-end; gap: 10px; width: 100%; padding-right: 7px;">
+                    <button type="button" (click)="onReset()"
+                        style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0; color: black;">
+                        Cancel
+                    </button>
+                    <button type="button" (click)="onSave()"
+                        style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; color: white;">
+                        Save
+                    </button>
+                </div>
+            </div>
+            <!-- <app-service-fixed [selectedCompanyId]="selectedCompanyId"></app-service-fixed> -->
+        </div>
+
+        <div class="col-12" *ngIf="showPercentage">
+            <!-- <app-service-percentage [selectedCompanyId]="selectedCompanyId"></app-service-percentage> -->
+            <form [formGroup]="percentageForm">
+
+                <div class="component-box">
+                    <mat-card-content>
+                        <div class="percentage-inner">
+
+                            <!-- ROW 1 -->
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-4">
+                                    <label class="form-label text-muted small">Map Name <span
+                                            class="text-danger">*</span></label>
+
+                                    <!-- <select class="form-select form-select-sm" formControlName="mapName">
+                <option value="">Select</option>
+                <option *ngFor="let item of mapNameList" [ngValue]="item">
+                    {{ item.map_Name }}
+                </option>
+            </select> -->
+
+                                    <mapname [selectedCompanyId]="selectedCompanyId"
+                                        (mapnameEmit)="handleMapNameEvent($event)">
+                                    </mapname>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label text-muted small">Paycode <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" class="form-control form-control-sm" formControlName="paycode">
+                                    <small class="text-danger"
+                                        *ngIf="showErrors && percentageForm.get('paycode')?.invalid">
+                                        Paycode is required
+                                    </small>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label text-muted small">Value</label>
+                                    <input type="number" class="form-control form-control-sm" formControlName="value">
+                                    <small class="text-danger"
+                                        *ngIf="showErrors && percentageForm.get('value')?.invalid">
+                                        Value is required
+                                    </small>
+                                </div>
+                            </div>
+
+                            <!-- ROW 2 -->
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-4">
+                                    <label class="form-label text-muted small">Cap Value <span
+                                            class="text-danger">*</span></label>
+                                    <input type="number" class="form-control form-control-sm"
+                                        formControlName="capValue">
+                                    <small class="text-danger"
+                                        *ngIf="showErrors && percentageForm.get('capValue')?.invalid">
+                                        CapValue is required
+                                    </small>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label text-muted small">Max Amount <span
+                                            class="text-danger">*</span></label>
+                                    <input type="number" class="form-control form-control-sm"
+                                        formControlName="maxAmount">
+                                    <small class="text-danger"
+                                        *ngIf="showErrors && percentageForm.get('maxAmount')?.invalid">
+                                        Max Amount is required
+                                    </small>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label">Effective Date <span class="text-danger">*</span></label>
+                                    <input type="date" class="form-control form-control-sm" formControlName="startDate">
+                                    <small class="text-danger"
+                                        *ngIf="showErrors && percentageForm.get('startDate')?.invalid">
+                                        Effective date is required
+                                    </small>
+                                </div>
+                            </div>
+
+                            <!-- ROW 3 -->
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-4">
+                                    <label class="form-label text-muted small">Compliance Fee <span
+                                            class="text-danger">*</span></label>
+                                    <input type="number" class="form-control form-control-sm"
+                                        formControlName="complianceFee">
+                                    <small class="text-danger"
+                                        *ngIf="showErrors && percentageForm.get('complianceFee')?.invalid">
+                                        Compliance Fee is required
+                                    </small>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label text-muted small">Rand Stad Fee <span
+                                            class="text-danger">*</span></label>
+                                    <input type="number" class="form-control form-control-sm"
+                                        formControlName="randstadFee">
+                                    <small class="text-danger"
+                                        *ngIf="showErrors && percentageForm.get('randstadFee')?.invalid">
+                                        Rand Stad Fee is required
+                                    </small>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label text-muted small">Upfront Fee Type <span
+                                            class="text-danger">*</span></label>
+                                    <select class="form-select form-select-sm" formControlName="upfrontFeeType">
+                                        <option value="">Select</option>
+                                        <option value="0">Fixed</option>
+                                        <option value="1">Percentage</option>
+                                    </select>
+                                    <small class="text-danger"
+                                        *ngIf="showErrors && percentageForm.get('upfrontFeeType')?.invalid">
+                                        Upfront Fee Type is required
+                                    </small>
+                                </div>
+                            </div>
+
+                            <!-- ROW 4 -->
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-4">
+                                    <label class="form-label text-muted small">Upfront Fee <span
+                                            class="text-danger">*</span></label>
+                                    <input type="number" class="form-control form-control-sm"
+                                        formControlName="upfrontFee">
+                                    <small class="text-danger"
+                                        *ngIf="showErrors && percentageForm.get('upfrontFee')?.invalid">
+                                        Upfront Fee is required
+                                    </small>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label text-muted small">Upfront Paycode <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" class="form-control form-control-sm"
+                                        formControlName="upfrontPaycode">
+                                    <small class="text-danger"
+                                        *ngIf="showErrors && percentageForm.get('upfrontPaycode')?.invalid">
+                                        Upfront Paycode is required
+                                    </small>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label text-muted small">Insurance Amount <span
+                                            class="text-danger">*</span></label>
+                                    <input type="number" class="form-control form-control-sm"
+                                        formControlName="insuranceAmount">
+                                    <small class="text-danger"
+                                        *ngIf="showErrors && percentageForm.get('insuranceAmount')?.invalid">
+                                        Insurance Amount is required
+                                    </small>
+                                </div>
+                            </div>
+
+                            <!-- ROW 5 -->
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-4">
+                                    <label class="form-label text-muted small">QDemy Fee Type <span
+                                            class="text-danger">*</span></label>
+                                    <select class="form-select form-select-sm" formControlName="qdemyFeeType">
+                                        <option value="">Select</option>
+                                        <option value="0">Fixed</option>
+                                        <option value="1">Percentage</option>
+                                    </select>
+                                    <small class="text-danger"
+                                        *ngIf="showErrors && percentageForm.get('qdemyFeeType')?.invalid">
+                                        QDemy Fee Type is required
+                                    </small>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label text-muted small">QDemy Charge <span
+                                            class="text-danger">*</span></label>
+                                    <input type="number" class="form-control form-control-sm"
+                                        formControlName="qdemyCharge">
+                                    <small class="text-danger"
+                                        *ngIf="showErrors && percentageForm.get('qdemyCharge')?.invalid">
+                                        QDemy Charge is required
+                                    </small>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label text-muted small">InEdge Fee Type <span
+                                            class="text-danger">*</span></label>
+                                    <select class="form-select form-select-sm" formControlName="inedgeFeeType">
+                                        <option value="">Select</option>
+                                        <option value="0">Fixed</option>
+                                        <option value="1">Percentage</option>
+                                    </select>
+                                    <small class="text-danger"
+                                        *ngIf="showErrors && percentageForm.get('inedgeFeeType')?.invalid">
+                                        InEdge Fee Type is required
+                                    </small>
+                                </div>
+                            </div>
+
+                            <!-- ROW 6 -->
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-4">
+                                    <label class="form-label text-muted small">InEdge Charge <span
+                                            class="text-danger">*</span></label>
+                                    <input type="number" class="form-control form-control-sm"
+                                        formControlName="inedgeCharge">
+                                    <small class="text-danger"
+                                        *ngIf="showErrors && percentageForm.get('inedgeCharge')?.invalid">
+                                        InEdge Charge is required
+                                    </small>
+                                </div>
+                            </div>
+
+                        </div>
+                    </mat-card-content>
+
+                    <!-- Buttons -->
+                    <div class="d-flex justify-content-end mt-3">
+                        <div class="btn-1"
+                            style="display: flex; justify-content: flex-end; gap: 10px; width: 100%; padding-right: 7px;">
+                            <button type="button" (click)="onResetPercentageForm()"
+                                style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0; color: black;">
+                                Cancel
+                            </button>
+                            <button type="button" (click)="onSubmit()"
+                                style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; color: white;">
+                                Save
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-12" *ngIf="showBill">
+            <!-- <app-service-bill-to-rate></app-service-bill-to-rate> -->
+
+            <form [formGroup]="billRateForm">
+
+                <br />
+
+                <mat-card-content>
+
+                    <!-- ROW 1 -->
+                    <div class="row g-3 mb-3">
+
+                        <div class="col-md-4">
+                            <label class="form-label text-muted small">Billing Category <span
+                                    class="text-danger">*</span></label>
+                            <select class="form-select form-select-sm" formControlName="billingCategory">
+                                <option value="">Select</option>
+                                <option *ngFor="let item of mapNameList" [value]="item.cost_Center_Mapping_Id">
+                                    {{ item.map_Name }}
+                                </option>
+                            </select>
+                            <small class="text-danger" *ngIf="showErrors && billRateForm.get('mapName')?.invalid">Map
+                                Name is
+                                required</small>
+                        </div>
+
+
+                        <div class="col-md-4">
+                            <label class="form-label text-muted small">Unit Price <span
+                                    class="text-danger">*</span></label>
+                            <input type="text" class="form-control form-control-sm" formControlName="unitPrice"
+                                (input)="allowNumbersOnly($event)">
+                            <small class="text-danger" *ngIf="showErrors && billRateForm.get('unitPrice')?.invalid">
+                                Unit Price is required
+                            </small>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label text-muted small">Unit Type<span
+                                    class="text-danger">*</span></label>
+                            <select class="form-select form-select-sm" formControlName="unitType">
+                                <option value="">Select</option>
+                            </select>
+                            <small class="text-danger" *ngIf="showErrors && billRateForm.get('unitType')?.invalid">
+                                Unit Type is required
+                            </small>
+                        </div>
+
+                    </div>
+
+
+                    <!-- ROW 2 -->
+                    <div class="row g-3 mb-3">
+
+                        <div class="col-md-4">
+                            <label class="form-label text-muted small">Invoice Category <span
+                                    class="text-danger">*</span></label>
+                            <select class="form-select form-select-sm" formControlName="invoiceCategory">
+                                <option value="">Select</option>
+                                <option value="Single">Single</option>
+                                <option value="Separate">Separate</option>
+                            </select>
+                            <small class="text-danger"
+                                *ngIf="showErrors && billRateForm.get('invoiceCategory')?.invalid">
+                                Invoice Category is required
+                            </small>
+                        </div>
+
+
+                        <div class="col-md-4">
+                            <label class="form-label text-muted small">Map Name <span
+                                    class="text-danger">*</span></label>
+                            <select class="form-select form-select-sm" formControlName="mapName">
+                                <option value="">Select</option>
+                                <option *ngFor="let item of mapNameList" [value]="item.cost_Center_Mapping_Id">
+                                    {{ item.map_Name }}
+                                </option>
+                            </select>
+                            <small class="text-danger" *ngIf="showErrors && billRateForm.get('mapName')?.invalid">Map
+                                Name is
+                                required</small>
+                        </div>
+
+
+
+                        <div class="col-md-4">
+                            <label class="form-label">Effective Date <span class="text-danger">*</span></label>
+                            <input type="date" class="form-control" formControlName="startDate" />
+                            <small class="text-danger" *ngIf="showErrors && billRateForm.get('startDate')?.invalid">
+                                Effective Date is required
+                            </small>
+                        </div>
+
+                    </div>
+
+
+                    <!-- ROW 3 -->
+                    <div class="row g-3 mb-3">
+
+                        <div class="col-md-4">
+                            <label class="form-label text-muted small">Discount Type <span
+                                    class="text-danger">*</span></label>
+                            <select class="form-select form-select-sm" formControlName="discountType">
+                                <option value="">Select</option>
+                                <option value="Fixed">Fixed</option>
+                                <option value="Percentage">Percentage</option>
+                            </select>
+                            <small class="text-danger" *ngIf="showErrors && billRateForm.get('discountType')?.invalid">
+                                Discount Type is required
+                            </small>
+                        </div>
+
+
+                        <div class="col-md-4">
+                            <label class="form-label text-muted small">Discount Amount<span
+                                    class="text-danger">*</span></label>
+                            <input type="text" class="form-control form-control-sm" formControlName="discountAmount"
+                                (input)="allowNumbersOnly($event)">
+                            <small class="text-danger"
+                                *ngIf="showErrors && billRateForm.get('discountAmount')?.invalid">
+                                Discount Amount is required
+                            </small>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label text-muted small">Prorate <span
+                                    class="text-danger">*</span></label>
+                            <select class="form-select form-select-sm" formControlName="prorate">
+                                <option value="">Select</option>
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                            <small class="text-danger" *ngIf="showErrors && billRateForm.get('prorate')?.invalid">
+                                Prorate is required
+                            </small>
+                        </div>
+
+
+                    </div>
+
+                </mat-card-content>
+
+                <br />
+
+                <div class="d-flex justify-content-end mt-3">
+
+                    <div class="btn-1"
+                        style="display: flex; justify-content: flex-end; gap: 10px; width: 100%; padding-right: 7px;">
+
+                        <button type="button" (click)="onBillReset()"
+                            style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0; color: black;">
+                            Cancel
+                        </button>
+
+
+                        <button type="button" (click)="onBillSubmit()"
+                            style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; color: white;">
+                            Save
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </form>
+        </div>
+
+        <div class="col-12" *ngIf="showSlab">
+            <!-- <app-service-slab></app-service-slab> -->
+            <!-- <br /> -->
+            <div class="row g-3 align-items-end mb-3">
+
+                <!-- LEFT: Slab -->
+                <div class="same-col col-6 lft_inputbox">
+
+                    <label class="form-label text-muted small">Slab</label>
+                    <select class="form-select form-select-sm slab-select" [(ngModel)]="selectedSlab"
+                        (change)="openSlabSection()">
+                        <option value="">Select</option>
+                        <option value="fixed">Fixed</option>
+                        <option value="percentage">Percentage</option>
+                    </select>
+                </div>
+
+                <!-- RIGHT: FIXED TYPE -->
+                <div class="same-col shift-right fixed-type-wrapper col-6 ryt_inputbox"
+                    *ngIf="selectedSlab === 'fixed'">
+                    <label class="form-label text-muted small">Fixed Type</label>
+                    <select class="form-select form-select-sm fixed-type-select" [(ngModel)]="selectedFixedType">
+                        <option value="">Select</option>
+                        <option value="ctc">CTC</option>
+                        <option value="headcount">Headcount</option>
+                    </select>
+                </div>
+
+
+                <!-- RIGHT: PERCENTAGE TYPE -->
+                <div class="same-col shift-right Percentage-type-wrapper ryt_inputbox col-6"
+                    *ngIf="selectedSlab === 'percentage'">
+                    <label class="form-label text-muted small">Percentage Type</label>
+                    <select class="form-select form-select-sm percentage-type-select"
+                        [(ngModel)]="selectedPercentageType">
+                        <option value="">Select</option>
+                        <option value="ctc">CTC</option>
+                        <option value="headcount">Headcount</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <!-- FIXED CTC -->
+            <div *ngIf="selectedFixedType === 'ctc'">
+                <!-- <app-slab-fixed-ctc></app-slab-fixed-ctc> -->
+                <form [formGroup]="ctcForm">
+
+                    <br />
+
+                    <mat-card-content>
+
+                        <!-- ROW 1 -->
+                        <div class="row g-3 mb-3">
+
+                            <div class="col-md-4">
+                                <label class="form-label text-muted small">Map Name <span
+                                        class="text-danger">*</span></label>
+                                <select class="form-select form-select-sm" formControlName="mapName">
+                                    <option value="">Select</option>
+                                </select>
+                                <small class="text-danger" *ngIf="showErrors && ctcForm.get('mapName')?.invalid">
+                                    Map Name is required
+                                </small>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label text-muted small">Type <span
+                                        class="text-danger">*</span></label>
+                                <select class="form-select form-select-sm" formControlName="type">
+                                    <option value="">Select</option>
+                                </select>
+                                <small class="text-danger" *ngIf="showErrors && ctcForm.get('type')?.invalid">
+                                    Type is required
+                                </small>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label text-muted small">Paycode <span
+                                        class="text-danger">*</span></label>
+                                <select class="form-select form-select-sm" formControlName="paycode">
+                                    <option value="">Select</option>
+                                </select>
+                                <small class="text-danger" *ngIf="showErrors && ctcForm.get('paycode')?.invalid">
+                                    Paycode is required
+                                </small>
+                            </div>
+
+                        </div>
+
+                        <!-- ROW 2 -->
+                        <div class="row g-3 mb-3">
+
+                            <div class="col-md-4">
+                                <label class="form-label text-muted small">From <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" class="form-control form-control-sm" formControlName="fromValue" />
+                                <small class="text-danger" *ngIf="showErrors && ctcForm.get('fromValue')?.invalid">
+                                    From value is required
+                                </small>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label text-muted small">To <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control form-control-sm" formControlName="toValue" />
+                                <small class="text-danger" *ngIf="showErrors && ctcForm.get('toValue')?.invalid">
+                                    To value is required
+                                </small>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label text-muted small">Value <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" class="form-control form-control-sm" formControlName="value" />
+                                <small class="text-danger" *ngIf="showErrors && ctcForm.get('value')?.invalid">
+                                    Value is required
+                                </small>
+                            </div>
+
+                        </div>
+
+                        <!-- ROW 3 -->
+                        <div class="row g-3 mb-3">
+
+                            <div class="col-md-4">
+                                <label class="form-label text-muted small">Cap Value <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" class="form-control form-control-sm" formControlName="capValue" />
+                                <small class="text-danger" *ngIf="showErrors && ctcForm.get('capValue')?.invalid">
+                                    Cap Value is required
+                                </small>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label text-muted small">Prorate <span
+                                        class="text-danger">*</span></label>
+                                <select class="form-select form-select-sm" formControlName="prorate">
+                                    <option value="">Select</option>
+                                </select>
+                                <small class="text-danger" *ngIf="showErrors && ctcForm.get('prorate')?.invalid">
+                                    Prorate is required
+                                </small>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label text-muted small">Effective Date <span
+                                        class="text-danger">*</span></label>
+                                <input type="date" class="form-control form-control-sm" formControlName="startDate" />
+                                <small class="text-danger" *ngIf="showErrors && ctcForm.get('startDate')?.invalid">
+                                    Effective Date is required
+                                </small>
+                            </div>
+
+                        </div>
+
+                        <!-- ROW 4 -->
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-4">
+                                <label class="form-label text-muted small">Slab Calculation Type <span
+                                        class="text-danger">*</span></label>
+                                <select class="form-select form-select-sm" formControlName="slabCalcType">
+                                    <option value="">Select</option>
+                                </select>
+                                <small class="text-danger" *ngIf="showErrors && ctcForm.get('slabCalcType')?.invalid">
+                                    Slab Calculation Type is required
+                                </small>
+                            </div>
+                        </div>
+
+                    </mat-card-content>
+
+                    <!-- FOOTER -->
+                    <div class="d-flex justify-content-end mt-3" style="gap: 10px; padding-right: 8px;">
+
+                        <button type="button" (click)="onSlabCtcReset()" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+            cursor: pointer; background-color: #f0f0f0; color: black;">
+                            Cancel
+                        </button>
+
+                        <button type="button" (click)="onSlabCtcSubmit()" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+            cursor: pointer; background-color: blue; color: white;">
+                            Save
+                        </button>
+
+                    </div>
+
+                </form>
+            </div>
+
+            <!-- FIXED HEADCOUNT -->
+            <div *ngIf="selectedFixedType === 'headcount'">
+                <!-- <app-slab-fix-head-count></app-slab-fix-head-count> -->
+
+                <form [formGroup]="headCountForm">
+                    <br />
+
+
+                    <!-- BODY -->
+                    <mat-card-content>
+
+                        <div class="form-grid">
+
+                            <!-- Map Name -->
+                            <div>
+                                <label class="form-label text-muted small mb-0">
+                                    Map Name <span class="text-danger">*</span>
+                                </label>
+                                <input type="text" class="form-control form-control-sm" formControlName="mapName">
+                                <small class="text-danger" *ngIf="showErrors && headCountForm.get('mapName')?.invalid">
+                                    Map Name is required
+                                </small>
+                            </div>
+
+                            <!-- Is Map Name Required -->
+                            <div>
+                                <label class="form-label text-muted small mb-0">
+                                    Is Map Name Required <span class="text-danger">*</span>
+                                </label>
+                                <input type="text" class="form-control form-control-sm"
+                                    formControlName="isMapNameRequired">
+                                <small class="text-danger"
+                                    *ngIf="showErrors && headCountForm.get('isMapNameRequired')?.invalid">
+                                    This field is required
+                                </small>
+                            </div>
+
+                            <!-- Slab -->
+                            <div>
+                                <label class="form-label text-muted small mb-0">
+                                    Slab <span class="text-danger">*</span>
+                                </label>
+                                <input type="text" class="form-control form-control-sm" formControlName="slab">
+                                <small class="text-danger" *ngIf="showErrors && headCountForm.get('slab')?.invalid">
+                                    Slab is required
+                                </small>
+                            </div>
+
+                            <!-- Value -->
+                            <div>
+                                <label class="form-label text-muted small mb-0">
+                                    Value <span class="text-danger">*</span>
+                                </label>
+                                <input type="text" class="form-control form-control-sm" formControlName="value">
+                                <small class="text-danger" *ngIf="showErrors && headCountForm.get('value')?.invalid">
+                                    Value is required
+                                </small>
+                            </div>
+
+                            <!-- Effective Date -->
+                            <div>
+                                <label class="form-label text-muted small mb-0">
+                                    Effective Date <span class="text-danger">*</span>
+                                </label>
+                                <input type="date" class="form-control form-control-sm" formControlName="startDate">
+                                <small class="text-danger"
+                                    *ngIf="showErrors && headCountForm.get('startDate')?.invalid">
+                                    Effective Date is required
+                                </small>
+                            </div>
+
+                        </div>
+
+                    </mat-card-content>
+                    <br />
+
+                    <!-- FOOTER BUTTONS -->
+                    <div class="d-flex justify-content-end mt-3" style="gap: 10px; padding-right: 8px;">
+
+                        <button type="button" (click)="onSlabHeadCountReset()" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+            cursor: pointer; background-color: #f0f0f0; color: black;">
+                            Cancel
+                        </button>
+
+                        <button type="button" (click)="onSlabHeadCountSubmit()" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+            cursor: pointer; background-color: blue; color: white;">
+                            Save
+                        </button>
+
+                    </div>
+
+                </form>
+            </div>
+
+            <!-- PERCENTAGE CTC -->
+            <div *ngIf="selectedPercentageType === 'ctc'">
+                <!-- <app-slab-per-ctc></app-slab-per-ctc> -->
+
+                <form [formGroup]="ctcPerForm">
+
+                    <br />
+                    <br />
+
+                    <mat-card-content>
+
+                        <!-- ROW 1 -->
+                        <div class="row g-3 mb-3">
+
+                            <div class="col-md-4">
+                                <label class="form-label text-muted small">Map Name <span
+                                        class="text-danger">*</span></label>
+                                <select class="form-select form-select-sm" formControlName="mapName">
+                                    <option value="">Select</option>
+                                </select>
+                                <small class="text-danger" *ngIf="showErrors && ctcPerForm.get('mapName')?.invalid">
+                                    Map Name is required
+                                </small>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label text-muted small">Value <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" class="form-control form-control-sm" formControlName="value" />
+                                <small class="text-danger" *ngIf="showErrors && ctcForm.get('value')?.invalid">
+                                    Value is required
+                                </small>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label text-muted small">Prorate <span
+                                        class="text-danger">*</span></label>
+                                <select class="form-select form-select-sm" formControlName="prorate">
+                                    <option value="">Select</option>
+                                </select>
+                                <small class="text-danger" *ngIf="showErrors && ctcPerForm.get('prorate')?.invalid">
+                                    Prorate is required
+                                </small>
+                            </div>
+
+                        </div>
+
+                        <!-- ROW 2 -->
+                        <div class="row g-3 mb-3">
+
+                            <div class="col-md-4">
+                                <label class="form-label text-muted small">FAndF Prorate <span
+                                        class="text-danger">*</span></label>
+                                <select class="form-select form-select-sm" formControlName="ffProrate">
+                                    <option value="">Select</option>
+                                </select>
+                                <small class="text-danger" *ngIf="showErrors && ctcPerForm.get('ffProrate')?.invalid">
+                                    This field is required
+                                </small>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label text-muted small">FAndF Arrear Prorate <span
+                                        class="text-danger">*</span></label>
+                                <select class="form-select form-select-sm" formControlName="ffArrearProrate">
+                                    <option value="">Select</option>
+                                </select>
+                                <small class="text-danger"
+                                    *ngIf="showErrors && ctcPerForm.get('ffArrearProrate')?.invalid">
+                                    This field is required
+                                </small>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label text-muted small">NewJoinee Prorate <span
+                                        class="text-danger">*</span></label>
+                                <select class="form-select form-select-sm" formControlName="newJoineeProrate">
+                                    <option value="">Select</option>
+                                </select>
+                                <small class="text-danger"
+                                    *ngIf="showErrors && ctcPerForm.get('newJoineeProrate')?.invalid">
+                                    This field is required
+                                </small>
+                            </div>
+
+                        </div>
+
+                        <!-- ROW 3 -->
+                        <div class="row g-3 mb-3">
+
+                            <div class="col-md-4">
+                                <label class="form-label text-muted small">NewJoinee Arrear Prorate <span
+                                        class="text-danger">*</span></label>
+                                <select class="form-select form-select-sm" formControlName="newJoineeArrearProrate">
+                                    <option value="">Select</option>
+                                </select>
+                                <small class="text-danger"
+                                    *ngIf="showErrors && ctcPerForm.get('newJoineeArrearProrate')?.invalid">
+                                    This field is required
+                                </small>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label text-muted small">Effective Date <span
+                                        class="text-danger">*</span></label>
+                                <input type="date" class="form-control form-control-sm" formControlName="startDate" />
+                                <small class="text-danger" *ngIf="showErrors && ctcPerForm.get('startDate')?.invalid">
+                                    Effective Date is required
+                                </small>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label text-muted small">Compliance Fee <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" class="form-control form-control-sm"
+                                    formControlName="complianceFee" />
+                                <small class="text-danger"
+                                    *ngIf="showErrors && ctcPerForm.get('complianceFee')?.invalid">
+                                    Compliance Fee is required
+                                </small>
+                            </div>
+
+                        </div>
+
+                        <!-- ROW 4 -->
+                        <div class="row g-3 mb-3">
+
+                            <div class="col-md-4">
+                                <label class="form-label text-muted small">Randstad Fee <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" class="form-control form-control-sm" formControlName="randstadFee" />
+                                <small class="text-danger" *ngIf="showErrors && ctcPerForm.get('randstadFee')?.invalid">
+                                    Randstad Fee is required
+                                </small>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label text-muted small">Upfront Fee Type <span
+                                        class="text-danger">*</span></label>
+                                <select class="form-select form-select-sm" formControlName="upfrontFeeType">
+                                    <option value="">Select</option>
+                                </select>
+                                <small class="text-danger"
+                                    *ngIf="showErrors && ctcPerForm.get('upfrontFeeType')?.invalid">
+                                    Upfront Fee Type is required
+                                </small>
+                            </div>
+
+                        </div>
+
+                    </mat-card-content>
+
+                    <!-- FOOTER BUTTONS -->
+                    <div class="d-flex justify-content-end mt-3" style="gap: 10px; padding-right: 8px;">
+
+                        <button type="button" (click)="onSalbPerCtcReset()" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+        cursor: pointer; background-color: #f0f0f0; color: black;">
+                            Cancel
+                        </button>
+
+                        <button type="button" (click)="onSlabPerCtcSubmit()" style="border: none; border-radius: 7px; width: 80px; height: 30px;
+        cursor: pointer; background-color: blue; color: white;">
+                            Save
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- PERCENTAGE HEADCOUNT -->
+            <div *ngIf="selectedPercentageType === 'headcount'">
+                <!-- <app-slab-per-head-count></app-slab-per-head-count> -->
+
+                <form [formGroup]="slabPerHeadForm">
+
+                    <br><br>
+
+                    <mat-card-content>
+
+                        <!-- ROW 1 -->
+                        <div class="row g-3 mb-3">
+
+                            <!-- Map Name -->
+                            <div class="col-md-4">
+                                <label class="form-label text-muted small">Map Name <span
+                                        class="text-danger">*</span></label>
+                                <select class="form-select form-select-sm" formControlName="mapName">
+                                    <option value="">Select</option>
+                                </select>
+                                <small class="text-danger"
+                                    *ngIf="showErrors && slabPerHeadForm.get('mapName')?.invalid">
+                                    Map Name is required
+                                </small>
+                            </div>
+
+                            <!-- Is Map Name Require -->
+                            <div class="col-md-4">
+                                <label class="form-label text-muted small">Is Map Name Required <span
+                                        class="text-danger">*</span></label>
+                                <select class="form-select form-select-sm" formControlName="isMapNameRequired">
+                                    <option value="">Select</option>
+                                </select>
+                                <small class="text-danger"
+                                    *ngIf="showErrors && slabPerHeadForm.get('isMapNameRequired')?.invalid">
+                                    This field is required
+                                </small>
+                            </div>
+
+                            <!-- Slab -->
+                            <div class="col-md-4">
+                                <label class="form-label text-muted small">Slab <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" class="form-control form-control-sm" formControlName="slab">
+                                <small class="text-danger" *ngIf="showErrors && slabPerHeadForm.get('slab')?.invalid">
+                                    Slab is required
+                                </small>
+                            </div>
+
+                        </div>
+
+                        <!-- ROW 2 -->
+                        <div class="row g-3 mb-3">
+
+                            <!-- Value -->
+                            <div class="col-md-4">
+                                <label class="form-label text-muted small">Value<span
+                                        class="text-danger">*</span></label>
+                                <input type="text" class="form-control form-control-sm" formControlName="value">
+                                <small class="text-danger" *ngIf="showErrors && slabPerHeadForm.get('value')?.invalid">
+                                    Value is required
+                                </small>
+                            </div>
+
+                            <!-- Date -->
+                            <div class="col-md-4">
+                                <label class="form-label text-muted small">Effective Date <span
+                                        class="text-danger">*</span></label>
+                                <input type="date" class="form-control form-control-sm" formControlName="startDate">
+                                <small class="text-danger"
+                                    *ngIf="showErrors && slabPerHeadForm.get('startDate')?.invalid">
+                                    Effective Date is required
+                                </small>
+                            </div>
+
+                        </div>
+
+                    </mat-card-content>
+
+                    <!-- FOOTER -->
+                    <div class="d-flex justify-content-end mt-3">
+
+                        <div class="btn-1"
+                            style="display: flex; justify-content: flex-end; gap: 10px; width: 100%; padding-right: 7px;">
+
+                            <button type="button" (click)="onSlabPerheadcountReset()"
+                                style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0; color: black;">
+                                Cancel
+                            </button>
+
+
+                            <button type="button" (click)="onSlabPerheadcountSubmit()"
+                                style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; color: white;">
+                                Save
+                            </button>
+
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- SUPPLEMENTARY BODY -->
+        <div class="col-12" *ngIf="showSuppFixed">
+            <!-- <app-supplementary-fixed></app-supplementary-fixed> -->
+            <form [formGroup]="suppFixForm">
+
+                <div class="component-box">
+                    <mat-card-content>
+                        <div class="supplementary-inner">
+
+                            <!-- ROW 1 -->
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-4">
+                                    <label class="form-label text-muted small">Map Name <span
+                                            class="text-danger">*</span></label>
+                                    <select class="form-select form-select-sm" formControlName="mapName">
+                                        <option value="">Select</option>
+                                        <option *ngFor="let item of mapNameList" [value]="item.cost_Center_Mapping_Id">
+                                            {{ item.map_Name }}
+                                        </option>
+                                    </select>
+                                    <small class="text-danger"
+                                        *ngIf="showErrors && suppFixForm.get('mapName')?.invalid">
+                                        Map Name is required
+                                    </small>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label text-muted small">Paycode <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" class="form-control form-control-sm" formControlName="paycode"
+                                        (input)="allowNumbersOnly($event)">
+                                    <small class="text-danger"
+                                        *ngIf="showErrors && suppFixForm.get('paycode')?.invalid">
+                                        Paycode is required
+                                    </small>
+                                </div>
+
+                                <!-- <div class="col-md-4">
+                        <label class="form-label text-muted small">Slab <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control form-control-sm" formControlName="slab"
+                            (input)="allowNumbersOnly($event)">
+                        <small class="text-danger" *ngIf="showErrors && suppFixForm.get('slab')?.invalid">
+                            Slab is required
+                        </small>
+                    </div> -->
+                                <div class="col-md-4">
+                                    <label class="form-label text-muted small">Value <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" class="form-control form-control-sm" formControlName="value"
+                                        (input)="allowNumbersOnly($event)">
+                                    <small class="text-danger" *ngIf="showErrors && suppFixForm.get('value')?.invalid">
+                                        Value is required
+                                    </small>
+                                </div>
+                            </div>
+
+                            <!-- ROW 2 -->
+                            <div class="row g-3 mb-3">
+
+
+                                <div class="col-md-4">
+                                    <label class="form-label text-muted small">Effective Date <span
+                                            class="text-danger">*</span></label>
+                                    <input type="date" class="form-control form-control-sm" formControlName="startDate">
+                                    <small class="text-danger"
+                                        *ngIf="showErrors && suppFixForm.get('startDate')?.invalid">
+                                        Effective Date is required
+                                    </small>
+                                </div>
+                            </div>
+
+                            <!-- BUTTONS -->
+                            <div class="d-flex justify-content-end mt-3">
+                                <div class="btn-1"
+                                    style="display: flex; justify-content: flex-end; gap: 10px; width: 100%; padding-right: 7px;">
+                                    <button type="button" (click)="onSuppFixedReset()"
+                                        style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0; color: black;">
+                                        Cancel
+                                    </button>
+                                    <button type="button" (click)="onSuppFixedSubmit()"
+                                        style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; color: white;">
+                                        Save
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </mat-card-content>
+                </div>
+
+            </form>
+        </div>
+
+        <div class="col-12" *ngIf="showSuppPercentage">
+            <!-- <app-supplementary-percentage></app-supplementary-percentage> -->
+            <form [formGroup]="suppPerForm">
+                <br />
+
+                <!-- ROW 1 -->
+                <div class="row g-3 mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Map Name *</label>
+                        <select class="form-select form-select-sm" formControlName="mapName">
+                            <option value="">Select</option>
+                            <option *ngFor="let item of mapNameList" [value]="item.cost_Center_Mapping_Id">
+                                {{ item.map_Name }}
+                            </option>
+                        </select>
+                        <small class="text-danger" *ngIf="showErrors && suppPerForm.get('mapName')?.invalid">
+                            Map Name is required
+                        </small>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Paycode *</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="paycode" />
+                        <small class="text-danger" *ngIf="showErrors && suppPerForm.get('paycode')?.invalid">
+                            Paycode is required
+                        </small>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Value *</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="value"
+                            (input)="allowNumbersOnly($event)" />
+                        <small class="text-danger" *ngIf="showErrors && suppPerForm.get('value')?.invalid">
+                            Value is required
+                        </small>
+                    </div>
+                </div>
+
+                <!-- ROW 2 -->
+                <div class="row g-3 mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Max Amount *</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="maxAmount"
+                            (input)="allowNumbersOnly($event)" />
+                        <small class="text-danger" *ngIf="showErrors && suppPerForm.get('maxAmount')?.invalid">
+                            Max Amount is required
+                        </small>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Effective Date *</label>
+                        <input type="date" class="form-control form-control-sm" formControlName="startDate" />
+                        <small class="text-danger" *ngIf="showErrors && suppPerForm.get('startDate')?.invalid">
+                            Effective Date is required
+                        </small>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-muted small">Marginal Paycode<span
+                                class="text-danger">*</span></label>
+                        <select class="form-select form-select-sm" formControlName="marginalPaycode">
+                            <option value="">Select</option>
+                        </select>
+                        <small class="text-danger" *ngIf="showErrors && suppPerForm.get('marginalPaycode')?.invalid">
+                            Marginal Paycode is required
+                        </small>
+                    </div>
+                </div>
+                <br />
+
+                <!-- BUTTONS -->
+                <div class="d-flex justify-content-end mt-3">
+                    <div class="btn-1"
+                        style="display: flex; justify-content: flex-end; gap: 10px; width: 100%; padding-right: 7px;">
+                        <button type="button" (click)="onSuppPerReset()"
+                            style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: #f0f0f0; color: black;">
+                            Cancel
+                        </button>
+
+                        <button type="button" (click)="onSuppPerSubmit()"
+                            style="border: none; border-radius: 7px; width: 80px; height: 30px; cursor: pointer; background-color: blue; color: white;">
+                            Save
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </mat-card-content>
+</mat-card>

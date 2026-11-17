@@ -1,0 +1,261 @@
+<div class="container-fluid w-100" style="padding-left:16px; padding-right:0;">
+
+    <!-- TITLE -->
+    <div style="
+        color:#302CB3;
+        font-size:22px;
+        font-family:Montserrat;
+        font-weight:700;
+        padding-top:8px;
+        margin-bottom:6px;">
+        Leave Rule
+    </div>
+
+    <!-- FILTERS -->
+    <div class="card-body" style="padding:0;">
+        <!-- 🔥 key fix: remove row negative margin -->
+        <div class="row g-1 align-items-end w-100" style="margin-left:0; margin-right:0;">
+
+            <div class="col-md-3">
+                <label class="form-label text-muted small">Company Code<span style="color: red;">*</span></label>
+                <companyall (companyEmit)="handleCompanyEvent($event)"></companyall>
+            </div>
+
+            <div class="col-md-3">
+                <label class="form-label text-muted small">Site Name<span style="color: red;">*</span></label>
+                <groupname [selectedCompanyId]="companyId" (sitenameEmit)="groupnameEvent($event)">
+                </groupname>
+            </div>
+
+            <div class="col-md-3">
+                <label class="form-label text-muted small">State</label>
+                <state (stateEmit)="stateEvent($event)"></state>
+            </div>
+
+            <div class="col-md-3" style="padding-top:27px;">
+                <div class="d-flex gap-2">
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-search"
+                        (click)="Searchclick()" matTooltip="Search">
+                        <mat-icon>search</mat-icon>
+                    </button>
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-add"
+                        (click)="onMainAddClick()" matTooltip="Add">
+                        <mat-icon>add</mat-icon>
+                    </button>
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-download"
+                        (click)="DownloadTemplate()" matTooltip="Template">
+                        <mat-icon>cloud_download</mat-icon>
+                    </button>
+
+                    <button class="btn btn-sm d-flex align-items-center justify-content-center btn-upload"
+                        (click)="ImportClick(fileInput)" matTooltip="Import">
+                        <mat-icon>cloud_upload</mat-icon>
+                    </button>
+
+                    <button *ngIf="(dataSource.data.length || 0) > 0"
+                        class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center"
+                        (click)="ExportClick()" matTooltip="Excel Export">
+                        <mat-icon>table_chart</mat-icon>
+                    </button>
+
+                    <input type="file" #fileInput style="display:none;" (click)="fileInput.value=''"
+                        (change)="onFileChange($event)" accept=".xlsx,.xls" />
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-md-12" style="padding-left: 50px;" [hidden]="!showTable">
+        <div class="table-wrapper">
+            <div class="table-scroll">
+                <table class="previewtable" mat-table [dataSource]="dataSource" matSort
+                    class="custom-table mat-elevation-z8">
+                    <!-- Dynamic Columns -->
+                    <ng-container *ngFor="let column of dynamicColumns" [matColumnDef]="column">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header><strong>{{ headerMap[column] || column
+                                }}</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let element"> {{ element[column] }} </mat-cell>
+                    </ng-container>
+
+                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="onTopRowClick(row)"></mat-row>
+                </table>
+            </div>
+            <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons></mat-paginator>
+        </div>
+    </div>
+</div>
+<ng-template #popupTpl>
+    <h2 mat-dialog-title class="d-flex justify-content-between align-items-center">
+        <span>Leave Rules</span>
+        <button mat-icon-button mat-dialog-close aria-label="Close">
+            <mat-icon>close</mat-icon>
+        </button>
+    </h2>
+
+    <mat-dialog-content class="mat-typography">
+        <!-- your exact div goes here -->
+        <div>
+            <div class="row">
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Company Code</label>
+                    <ng-container *ngIf="isNew; else existingCompany">
+                        <companyall (companyEmit)="handleCompanyEventpopup($event)"></companyall>
+                    </ng-container>
+                    <ng-template #existingCompany>
+                        <label class="form-control" style="font-size: 11px;">{{ selectedrowCompanyCode }}</label>
+                    </ng-template>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">Site Name</label>
+                    <ng-container *ngIf="isNew; else existingSite">
+                        <groupname [selectedCompanyId]="companyIdpopup" (sitenameEmit)="groupnameEventpopup($event)">
+                        </groupname>
+                    </ng-container>
+                    <ng-template #existingSite>
+                        <label class="form-control" style="font-size: 11px;">{{ selectedrowSiteName }}</label>
+                    </ng-template>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label text-muted small">State</label>
+                    <ng-container *ngIf="isNew; else existingState">
+                        <state (stateEmit)="stateEventpopup($event)"></state>
+                    </ng-container>
+                    <ng-template #existingState>
+                        <label class="form-control" style="font-size: 11px;">{{ selectedrowState }}</label>
+                    </ng-template>
+                </div>
+            </div>
+
+            <div class="row" style="padding-top: 1rem;">
+                <div class="col-md-2">
+                    <label class="form-label text-muted small d-block">From Month</label>
+                    <ng-container>
+                        <select class="form-control" [(ngModel)]="selectedFromdate" style="font-size: 11px;">
+                            <option *ngFor="let m of months" [value]="m">{{ m }}</option>
+                        </select>
+                    </ng-container>
+                </div>
+
+                <div class="col-md-2">
+                    <label class="form-label text-muted small d-block">To Month</label>
+                    <ng-container>
+                        <select class="form-control" [(ngModel)]="selectedTodate" style="font-size: 11px;">
+                            <option *ngFor="let m of months" [value]="m">{{ m }}</option>
+                        </select>
+                    </ng-container>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label text-muted small d-block">Effective Date</label>
+                    <ng-container>
+                        <input type="date" class="form-control" [(ngModel)]="selectedEffectiveDate"
+                            style="font-size: 11px;">
+                    </ng-container>
+                </div>
+
+            </div>
+
+            <br />
+            <div>
+                <form [formGroup]="leaveruleForm">
+                    <table class="table table-bordered w-100" style="font-size: 11px;">
+                        <thead>
+                            <tr>
+                                <th>Sl. No</th>
+                                <th>Leave Type</th>
+                                <th>Credit</th>
+                                <th>Invoice leave details</th>
+                                <th>Carry Forward</th>
+                                <th>Max Days</th>
+                                <th>Encashment</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody formArrayName="leaverules">
+                            <tr *ngFor="let row of leaverules.controls; let i = index" [formGroupName]="i">
+                                <td>{{ i + 1 }}</td>
+                                <td>
+                                    <select class="form-control" formControlName="leavetype" style="font-size: 11px;">
+                                        <option value="">Select</option>
+                                        <option *ngFor="let lt of leavetypedetails" [value]="lt.leavetype">{{
+                                            lt.leavetype }}</option>
+                                    </select>
+                                </td>
+                                <td><input class="form-control" type="text" formControlName="credit"
+                                        style="font-size: 11px;" (input)="onDecimalInput($event, row.get('credit'))"
+                                        maxlength="5" width="10%" />
+                                </td>
+                                <td><input class="form-control" type="text" formControlName="invoiceLeaveDetails"
+                                        style="font-size: 11px;"
+                                        (input)="onDecimalInput($event, row.get('invoiceLeaveDetails'))"
+                                        maxlength="5" />
+                                </td>
+                                <td>
+                                    <select formControlName="carryForward" class="form-control"
+                                        style="font-size: 11px;">
+                                        <option value="0">Select</option>
+                                        <option value="1">Yes</option>
+                                        <option value="2">No</option>
+                                    </select>
+                                </td>
+                                <td><input class="form-control" type="text" formControlName="maxDays"
+                                        style="font-size: 11px;" (input)="onDecimalInput($event, row.get('maxDays'))"
+                                        maxlength="5" /></td>
+                                <td>
+                                    <select formControlName="encashment" class="form-control" style="font-size: 11px;">
+                                        <option value="0">Select</option>
+                                        <option value="1">Yes</option>
+                                        <option value="2">No</option>
+                                    </select>
+                                </td>
+                                <td class="text-center">
+                                    <button class="btn btn-sm btn-add" *ngIf="!row.value.isSaved" (click)="addRow(i)"
+                                        [disabled]="row.invalid">
+                                        <mat-icon>add</mat-icon>
+                                    </button>
+                                    <button class="btn btn-sm btn-delete" *ngIf="row.value.isSaved"
+                                        (click)="deleteRow(i)">
+                                        <mat-icon>delete</mat-icon>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+            <div *ngIf="isNew" class="row mt-3">
+                <div class="col-md-5"></div>
+                <div class="col-md-1">
+                    <button *ngIf="isNew" class="btn btn-success" (click)="Saveclick()">Save</button>
+                </div>
+                <div class="col-md-1">
+                    <button class="btn btn-secondary" mat-dialog-close>Close</button>
+                </div>
+                <div class="col-md-5"></div>
+            </div>
+            <div *ngIf="!isNew" class="row mt-3">
+                <div class="col-md-4"></div>
+                <div class="col-md-4" style="display: flex;gap: 10px;align-items: center;">
+                    <button class="btn btn-success" (click)="Updateclick()">Update</button>
+                    <button class="btn btn-danger" (click)="Deleteclick()">Delete All</button>
+                    <button class="btn btn-secondary" mat-dialog-close>Close</button>
+                </div>
+                <div class="col-md-4"></div>
+            </div>
+        </div>
+    </mat-dialog-content>
+</ng-template>
+<div *ngIf="isLoading" class="loading-overlay">
+    <img src="assets/Loading.gif" alt="Loading...">
+</div>
+<div *ngIf="showPopup" class="overlay"></div>
+<app-alertpopup *ngIf="showPopup" [message]="popupMessage" [submessage]="popupSubMessage" class="centered-popup"
+    (close)="showPopup = false"></app-alertpopup>

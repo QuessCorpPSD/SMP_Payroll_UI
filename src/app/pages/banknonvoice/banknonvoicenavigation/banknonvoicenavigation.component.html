@@ -1,0 +1,21 @@
+<div class="headerSOP">
+        <!-- <div style="width: 50%;"> <img style="width: 25px;vertical-align: text-bottom;margin-right: 5px;" src="../../../assets/Bank.svg" /><b class="customer-sop">Bank Non-Invoice</b>
+        </div> -->
+        <div style="width: 50%;"> <img style="width: 25px;vertical-align: text-bottom;margin-right: 5px;"
+                        src="../../../assets/Forward File 1.svg" /><b class="customer-sop">Bank Non-Invoice</b>
+        </div>
+</div>
+<div class="contentCategory">
+        <div style="width: 100%;">
+                <div class="Categorylist">
+                       <ul class="horizontal-list">
+                                <li *ngFor="let menu of childMenus">
+                                        <a [routerLink]="menu.childroute" class="nav-link" routerLinkActive="selectedInput"
+                                                [routerLinkActiveOptions]="{ exact: true }">
+                                                {{ menu.childdisplayText }}
+                                        </a>
+                                </li>
+                        </ul>
+                </div>
+        </div>
+        <router-outlet></router-outlet>

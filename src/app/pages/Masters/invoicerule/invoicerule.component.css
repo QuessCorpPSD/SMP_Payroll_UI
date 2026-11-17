@@ -1,0 +1,384 @@
+.table-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  padding: 20px 25px 0 25px;
+}
+
+.table-scroll {
+  width: 100%;
+  max-height: 450px;
+  /* adjust based on need */
+  overflow-x: auto;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #fff;
+}
+
+.custom-table {
+  width: max-content;
+  min-width: 100%;
+  background: #fff;
+  table-layout: auto !important;
+  border-collapse: collapse;
+}
+
+::ng-deep .mat-elevation-z8 {
+  box-shadow: none !important;
+}
+
+/* Header Cells */
+::ng-deep .mat-mdc-header-cell {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600 !important;
+  font-size: 12px;
+  line-height: 19.4px;
+  border-right: 1px solid #ddd;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  position: sticky;
+  top: 0;
+  min-width: 140px;
+  height: 32px;
+  white-space: nowrap;
+}
+
+/* Body Cells */
+::ng-deep .mat-mdc-cell {
+  font-family: "Montserrat", sans-serif;
+  font-size: 12px;
+  font-weight: 600 !important;
+  line-height: 22.4px;
+  color: #222;
+  border-bottom: 1px dashed #E8E8E8 !important;
+  border-right: 1px solid #ddd;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 0 10px;
+  height: 30px;
+  min-width: 140px;
+  white-space: nowrap;
+}
+
+/* Hover Effect */
+::ng-deep .mat-row:hover {
+  background-color: #f9f9f9 !important;
+  transition: background 0.2s ease-in-out;
+}
+
+/* Row Height */
+::ng-deep .mat-row {
+  height: 32px !important;
+}
+
+
+::ng-deep .mat-mdc-paginator {
+  border: 1px solid #ddd;
+  border-top: none;
+  border-radius: 0 0 4px 4px;
+  background-color: #ffffff !important;
+  display: flex;
+  justify-content: space-between;
+  align-items: center !important;
+  padding: 4px 12px !important;
+}
+
+::ng-deep .mat-mdc-paginator-range-label {
+  font-size: 13px;
+  font-weight: 500 !important;
+  color: #000000;
+}
+
+::ng-deep .mat-mdc-paginator-icon {
+  color: #302CB3 !important;
+}
+
+::ng-deep .mat-mdc-icon-button:hover {
+  background-color: #f1f1f1 !important;
+}
+
+
+.fixed-width-column {
+  width: 50px;
+  min-width: 50px;
+  max-width: 75px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.fixed-width-column2 {
+  width: 30px;
+  min-width: 30px;
+  max-width: 50px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.action-buttons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  /* space between edit and delete */
+}
+
+.btn-edit {
+  background: none;
+  border: none;
+  padding: 0;
+  min-width: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.delete-icon {
+  cursor: pointer;
+  width: 20px;
+  /* adjust size as needed */
+  height: 20px;
+}
+
+
+
+select,
+input {
+  width: 100%;
+  padding: 6px 8px;
+  border-radius: 4px;
+  border: 1px solid #A0A0A0;
+  font-size: 12px;
+  font-family: "Montserrat", sans-serif;
+  color: #222;
+  appearance: outline;
+}
+
+option {
+  padding: 8px;
+  background-color: #fff;
+  color: #222;
+  font-size: 12px;
+  font-family: "Montserrat", sans-serif;
+}
+
+option:hover {
+  background-color: #ddd;
+  color: #fff;
+}
+
+option:checked {
+  background-color: #7E7E7E;
+  color: #fff;
+}
+
+
+.previewtable {
+  width: auto;
+  table-layout: auto;
+  border-collapse: collapse;
+  font-family: "Montserrat", sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 22.4px;
+  color: #7E7E7E;
+  border: 1px solid #E8E8E8;
+}
+
+.previewtable th,
+.previewtable td {
+  font-family: "Montserrat", sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 22.4px;
+  letter-spacing: 0.24px;
+  white-space: nowrap;
+  padding: 8px;
+  border: 1px solid #E8E8E8;
+  text-align: left;
+}
+
+.previewtable th {
+  background-color: #f9f9f9;
+  color: #A0A0A0;
+}
+
+
+.offer-style {
+  border-radius: 6px;
+  border: 1px solid #C7F5BB;
+  background: #E9FFE3;
+  height: 22px;
+  width: 87px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.popup-card {
+  width: 800px;
+  max-width: 75%;
+  height: 80vh;
+  max-height: 80vh;
+  overflow-y: auto;
+  background-color: #fff;
+  border-radius: 6px;
+  padding: 15px;
+}
+
+
+.custom-checkbox {
+  width: 16px;
+  height: 16px;
+  transform: scale(1.5);
+  cursor: pointer;
+}
+
+.checkbox-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 300px;
+  height: 42px;
+  font-size: 12px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  color: #89898B;
+}
+
+
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  margin: -5px;
+}
+
+.form-label {
+  font-size: 12px !important;
+  color: #222 !important;
+}
+
+.custom-input {
+  width: 150px;
+  height: 60px;
+
+  .mat-form-field-wrapper {
+    padding-bottom: 0px;
+  }
+
+  .mat-form-field-flex {
+    height: 10px;
+  }
+
+  .mat-input-element {
+    height: 10px;
+    padding: 1px 2px;
+    font-size: 14px;
+  }
+
+  .mat-form-field-underline {
+    bottom: 0px;
+  }
+
+  .mat-form-field-subscript-wrapper {
+    display: none;
+  }
+}
+
+.card-body {
+  width: 100%;
+  display: flex;
+  gap: 15px;
+  padding: 0px !important;
+  padding-left: 25px !important;
+}
+
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+.centered-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+}
+
+
+@media (max-width: 768px) {
+
+  ::ng-deep .mat-mdc-header-cell,
+  ::ng-deep .mat-mdc-cell {
+    font-size: 11px;
+    padding: 4px 6px;
+    min-width: 100px;
+  }
+
+  .custom-table {
+    min-width: 800px;
+  }
+
+  .table-scroll {
+    max-width: 100%;
+  }
+}
+
+.site-name-column {
+  min-width: 250px;
+  /* increase minimum width */
+  max-width: 350px;
+  /* optional max width */
+  width: 250px;
+  /* default width */
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
