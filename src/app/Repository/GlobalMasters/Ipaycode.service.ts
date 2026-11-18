@@ -4,6 +4,7 @@ import { APIResponse } from "../../Models/apiresponse";
 export interface IPAycodeService {
     GetPayType(): Observable<APIResponse>;
     SearchPayCode(payload: any): Observable<APIResponse>;
+    ExporttoExcelPayCode(payload: any): Observable<APIResponse>;
     CreatePayCode(payload: any): Observable<APIResponse>;
     GetPageType(): Observable<APIResponse>;
 

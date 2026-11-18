@@ -50,7 +50,7 @@ export class PaycodesComponent implements AfterViewInit {
 
   showTable = false;
 
-  uploadDisplayedColumns: string[] = ['Action', 'slNo', 'payCode', 'description', 'printAs', 'payType', 'taxable', 'projectTax', 'marginalTax', 'payCodeType', 'lopApplicable', 'pfApplicable', 'esiApplicable', 'ptApplicable', 'pageType', 'accountNumber', 'postingKey'];
+  uploadDisplayedColumns: string[] = ['Action', 'slNo', 'payCode', 'description', 'printAs', 'payType', 'projectTax', 'marginalTax', 'payCodeType', 'lopApplicable', 'pfApplicable', 'esiApplicable', 'taxable', 'ptApplicable', 'pageType', 'accountNumber', 'postingKey'];
 
   uploadedData: any[] = [];
 
@@ -168,7 +168,7 @@ export class PaycodesComponent implements AfterViewInit {
       "PayId": 0
     }
 
-    this.payCode.SearchPayCode(payload).subscribe({
+    this.payCode.ExporttoExcelPayCode(payload).subscribe({
       next: (res) => {
         this.isLoading = false;
         try {

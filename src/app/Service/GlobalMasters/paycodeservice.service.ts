@@ -20,6 +20,10 @@ export class PaycodeserviceService implements IPAycodeService {
     return this.http.post<APIResponse>(this.env.apiUrl + 'Paycode/Search', payload)
   }
 
+  ExporttoExcelPayCode(payload: any): Observable<APIResponse> {
+    return this.http.post<APIResponse>(this.env.apiUrl + 'Paycode/ExporttoExcelPayCode', payload)
+  }
+
   CreatePayCode(payload: any): Observable<APIResponse> {
     return this.http.post<APIResponse>(this.env.apiUrl + 'Paycode/Create', payload)
   }

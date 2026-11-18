@@ -44,7 +44,7 @@ export class CompanypaycodemappingComponent {
   isuploadgridvisible = false;
   uploadDisplayedColumns: string[] = [
     'SNo', 'CompanyCode', 'Paycode', 'Description', 'Paytype',
-    'taxable', 'LopApplicable', 'PfApplicable', 'ESIApplicable',
+    'LopApplicable', 'PfApplicable', 'ESIApplicable', 'taxable',
     'PTApplicable', 'Earnedpaycode', 'Pickfrom', 'Formula'
   ];
   uploadedData: any[] = [];
@@ -186,7 +186,7 @@ export class CompanypaycodemappingComponent {
 
         this.uploadDisplayedColumns = [
           'SNo', 'CompanyCode', 'Paycode', 'Description', 'Paytype',
-          'taxable', 'LopApplicable', 'PfApplicable', 'ESIApplicable',
+          'LopApplicable', 'PfApplicable', 'ESIApplicable', 'taxable',
           'PTApplicable', 'Earnedpaycode', 'Pickfrom', 'Formula'
         ];
       },

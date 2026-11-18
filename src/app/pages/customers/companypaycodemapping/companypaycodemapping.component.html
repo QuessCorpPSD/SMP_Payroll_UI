@@ -100,11 +100,6 @@
                         <mat-cell *matCellDef="let row">{{ row.PayType }}</mat-cell>
                     </ng-container>
 
-                    <!-- Taxable -->
-                    <ng-container matColumnDef="taxable">
-                        <mat-header-cell *matHeaderCellDef><strong>Taxable</strong></mat-header-cell>
-                        <mat-cell *matCellDef="let row">{{ row.Taxable }}</mat-cell>
-                    </ng-container>
 
                     <!-- LopApplicable -->
                     <ng-container matColumnDef="LopApplicable">
@@ -114,19 +109,25 @@
 
                     <!-- PfApplicable -->
                     <ng-container matColumnDef="PfApplicable">
-                        <mat-header-cell *matHeaderCellDef><strong>PF Applicable</strong></mat-header-cell>
+                        <mat-header-cell *matHeaderCellDef><strong>SSS Applicable</strong></mat-header-cell>
                         <mat-cell *matCellDef="let row">{{ row.PF_Applicable }}</mat-cell>
                     </ng-container>
 
                     <!-- ESIApplicable -->
                     <ng-container matColumnDef="ESIApplicable">
-                        <mat-header-cell *matHeaderCellDef><strong>ESI Applicable</strong></mat-header-cell>
+                        <mat-header-cell *matHeaderCellDef><strong>PHILE HEALTH Applicable</strong></mat-header-cell>
                         <mat-cell *matCellDef="let row">{{ row.ESI_Applicable }}</mat-cell>
                     </ng-container>
 
+                    <!-- Taxable -->
+                    <ng-container matColumnDef="taxable">
+                        <mat-header-cell *matHeaderCellDef><strong>BIR Taxable</strong></mat-header-cell>
+                        <mat-cell *matCellDef="let row">{{ row.Taxable }}</mat-cell>
+                    </ng-container>
+                    
                     <!-- PTApplicable -->
                     <ng-container matColumnDef="PTApplicable">
-                        <mat-header-cell *matHeaderCellDef><strong>PT Applicable</strong></mat-header-cell>
+                        <mat-header-cell *matHeaderCellDef><strong>PAG IBIG Applicable</strong></mat-header-cell>
                         <mat-cell *matCellDef="let row">{{ row.PT_Applicable }}</mat-cell>
                     </ng-container>
 

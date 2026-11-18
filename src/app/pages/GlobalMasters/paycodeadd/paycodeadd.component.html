@@ -43,14 +43,14 @@
                     </select>
                 </div>
                 <div class="col-md-4">
-                    <label class="form-label">PF Applicable<span class="text-danger"></span></label>
+                    <label class="form-label">SSS Applicable<span class="text-danger"></span></label>
                     <select class="form-select" formControlName="PFApplicable">
                         <option value="1">Yes</option>
                         <option value="0">No</option>
                     </select>
                 </div>
                 <div class="col-md-4">
-                    <label class="form-label">ESI Applicable<span class="text-danger"></span></label>
+                    <label class="form-label">PHILE HEALTH Applicable<span class="text-danger"></span></label>
                     <select class="form-select" formControlName="ESIApplicable">
                         <option value="1">Yes</option>
                         <option value="0">No</option>
@@ -60,7 +60,20 @@
             <!-- Row 3 -->
             <div class="row g-3 mb-3">
                 <div class="col-md-4">
-                    <label class="form-label">PT Applicable<span class="text-danger">*</span></label>
+                    <label class="form-label d-block">
+                        BIR Taxable <span class="text-danger"></span>
+                    </label>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" id="yes" value="1" formControlName="Taxable" />
+                        <label class="form-check-label" for="yes">Yes</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" id="no" value="0" formControlName="Taxable" />
+                        <label class="form-check-label" for="no">No</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">PAG IBIG Applicable<span class="text-danger">*</span></label>
                     <select class="form-select" formControlName="PTApplicable">
                         <option value="1">Yes</option>
                         <option value="0">No</option>
@@ -111,31 +124,17 @@
                         <option value="">-- Select --</option>
                     </select>
                 </div> -->
-                <div class="col-md-4">
-                    <label class="form-label d-block">
-                        Taxable <span class="text-danger"></span>
-                    </label>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" id="yes" value="1" formControlName="Taxable" />
-                        <label class="form-check-label" for="yes">Yes</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" id="no" value="0" formControlName="Taxable" />
-                        <label class="form-check-label" for="no">No</label>
-                    </div>
-                </div>
+
                 <div class="col-md-4">
                     <label class="form-label d-block">
                         Project Tax <span class="text-danger"></span>
                     </label>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" id="yes" value="1"
-                            formControlName="ProjectTax" />
+                        <input class="form-check-input" type="radio" id="yes" value="1" formControlName="ProjectTax" />
                         <label class="form-check-label" for="yes">Yes</label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" id="no" value="0"
-                            formControlName="ProjectTax" />
+                        <input class="form-check-input" type="radio" id="no" value="0" formControlName="ProjectTax" />
                         <label class="form-check-label" for="no">No</label>
                     </div>
                 </div>
@@ -145,8 +144,7 @@
                         Marginal Tax <span class="text-danger"></span>
                     </label>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" id="yes" value="1"
-                            formControlName="MarginalTax" />
+                        <input class="form-check-input" type="radio" id="yes" value="1" formControlName="MarginalTax" />
                         <label class="form-check-label" for="yes">Yes</label>
                     </div>
                     <div class="form-check form-check-inline">

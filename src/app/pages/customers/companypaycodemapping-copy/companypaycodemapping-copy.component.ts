@@ -46,10 +46,11 @@ export class CompanypaycodemappingCopyComponent {
   popupSubMessage: string = '';
   showPopup = false;
   isLoading: boolean = false;
-  uploadDisplayedColumns: string[] = ['SNo', 'Paycode', 'Description', 'Paytype', 'formula', 'taxable', 'LopApplicable', 'PfApplicable', 'Earnedpaycode', 'Pickfrom'];
+  uploadDisplayedColumns: string[] = ['SNo', 'Paycode', 'Description', 'Paytype', 'formula', 'LopApplicable', 'PfApplicable', 'taxable', 'Earnedpaycode', 'Pickfrom'];
   uploadedData: any[] = [];
   uploadedDataSource = new MatTableDataSource<any>(this.uploadedData);
   selectedRowIndex: number | null = null;
+  
 
 
   userdetail!: any;

@@ -78,14 +78,7 @@
                                     class="form-control form-control-sm"></textarea></mat-cell>
                         </ng-container>
 
-                        <ng-container matColumnDef="taxable">
-                            <mat-header-cell *matHeaderCellDef><strong>Taxable</strong></mat-header-cell>
-                            <mat-cell *matCellDef="let row">
-                                {{ row.Taxable === true || row.Taxable === 'Yes' ? 'Yes'
-                                : row.Taxable === false || row.Taxable === 'No' ? 'No'
-                                : '' }}
-                            </mat-cell>
-                        </ng-container>
+
 
                         <ng-container matColumnDef="LopApplicable">
                             <mat-header-cell *matHeaderCellDef><strong>LOP Applicable</strong></mat-header-cell>
@@ -97,7 +90,7 @@
                         </ng-container>
 
                         <ng-container matColumnDef="PfApplicable">
-                            <mat-header-cell *matHeaderCellDef><strong>PF Applicable</strong></mat-header-cell>
+                            <mat-header-cell *matHeaderCellDef><strong>SSS Applicable</strong></mat-header-cell>
                             <mat-cell *matCellDef="let row">
                                 {{ row.PF_Applicable === true || row.PF_Applicable === 'Yes' ? 'Yes'
                                 : row.PF_Applicable === false || row.PF_Applicable === 'No' ? 'No'
@@ -105,7 +98,14 @@
                             </mat-cell>
                         </ng-container>
 
-
+                        <ng-container matColumnDef="taxable">
+                            <mat-header-cell *matHeaderCellDef><strong>BIR Taxable</strong></mat-header-cell>
+                            <mat-cell *matCellDef="let row">
+                                {{ row.Taxable === true || row.Taxable === 'Yes' ? 'Yes'
+                                : row.Taxable === false || row.Taxable === 'No' ? 'No'
+                                : '' }}
+                            </mat-cell>
+                        </ng-container>
                         <!-- <ng-container matColumnDef="ESIApplicable">
                             <mat-header-cell *matHeaderCellDef><strong>ESI Applicable</strong></mat-header-cell>
                             <mat-cell *matCellDef="let row">
